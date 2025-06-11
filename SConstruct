@@ -107,7 +107,7 @@ AddOption('--no-colors', dest='use_colors', action='store_false',
           help="Don't add color to abbreviated scons output")
 AddOption('--with-cxx-config', action='store_true',
           help="Build with support for C++-based configuration")
-AddOption('--ignore-style', action='store_true',
+AddOption('--ignore-style', action='store_true', default=True,
           help='Disable style checking hooks')
 AddOption('--linker', action='store', default=None, choices=linker_options,
           help=f'Select which linker to use ({", ".join(linker_options)})')
