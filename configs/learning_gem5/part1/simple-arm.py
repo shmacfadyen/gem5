@@ -59,8 +59,7 @@ system.system_port = system.membus.cpu_side_ports
 thispath = os.path.dirname(os.path.realpath(__file__))
 binary = os.path.join(
     thispath,
-    "../../../",
-    "tests/test-progs/hello/bin/arm/linux/hello",
+    "test_files/multihelloworld-arm",
 )
 
 system.workload = SEWorkload.init_compatible(binary)
