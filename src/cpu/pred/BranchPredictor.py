@@ -238,12 +238,18 @@ class BiModeBP(BranchPredictor):
     choiceCtrBits = Param.Unsigned(2, "Bits of choice counters")
 
 
+# Python class for GAgBP
+# Needs to be added to the SConscript file to build (See comments in SConscript)
 class GAgBP(BranchPredictor):
+    # type, class, and header values obtained from C++ implementation
     type = "GAgBP"
     cxx_class = "gem5::branch_prediction::GAgBP"
     cxx_header = "cpu/pred/2level_gag.hh"
 
+    # A parameter used for the number of bits applied to the history register
     historyRegBits = Param.Unsigned(13, "Bits used for the history register")
+
+    # A parameter used for the number of bits applied to the prediction counters
     predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
 
 

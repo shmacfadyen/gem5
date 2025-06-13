@@ -42,6 +42,9 @@ system.mem_mode = "timing"
 system.mem_ranges = [AddrRange("512MiB")]
 system.cpu = ArmTimingSimpleCPU()
 
+# How to configure a branch prediction type for a CPU
+system.cpu.branchPred = GAgBP()
+
 system.membus = SystemXBar()
 
 system.cpu.icache_port = system.membus.cpu_side_ports
