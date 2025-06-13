@@ -238,6 +238,15 @@ class BiModeBP(BranchPredictor):
     choiceCtrBits = Param.Unsigned(2, "Bits of choice counters")
 
 
+class GAgBP(BranchPredictor):
+    type = "GAgBP"
+    cxx_class = "gem5::branch_prediction::GAgBP"
+    cxx_header = "cpu/pred/2level_gag.hh"
+
+    historyRegBits = Param.Unsigned(13, "Bits used for the history register")
+    predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
+
+
 class TAGEBase(SimObject):
     type = "TAGEBase"
     cxx_class = "gem5::branch_prediction::TAGEBase"
