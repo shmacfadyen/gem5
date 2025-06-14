@@ -37,13 +37,13 @@ system = System()
 
 # Set the clock frequency of the system (and all of its children)
 system.clk_domain = SrcClockDomain()
-system.clk_domain.clock = "1GHz"
+system.clk_domain.clock = "2GHz"
 system.clk_domain.voltage_domain = VoltageDomain()
 
 # Set up the system
-system.mem_mode = "timing" # Use timing accesses
-system.mem_ranges = [AddrRange("512MiB")] # Create an address range
-system.cpu = ArmTimingSimpleCPU()
+system.mem_mode = "atomic" # Use timing accesses
+system.mem_ranges = [AddrRange("4GiB")] # Create an address range
+system.cpu = ArmAtomicSimpleCPU()
 
 # Create a memory bus, a system crossbar, in this case
 system.membus = SystemXBar()
@@ -57,7 +57,7 @@ system.cpu.createInterruptController()
 
 # Create a DDR3 memory controller and connect it to the membus
 system.mem_ctrl = MemCtrl()
-system.mem_ctrl.dram = DDR3_1600_8x8()
+system.mem_ctrl.dram = DDR4_2400_8x8()
 system.mem_ctrl.dram.range = system.mem_ranges[0]
 system.mem_ctrl.port = system.membus.mem_side_ports
 
@@ -65,9 +65,9 @@ system.mem_ctrl.port = system.membus.mem_side_ports
 system.system_port = system.membus.cpu_side_ports
 
 #Branch Prediction
-#system.cpu.branchPred = GAgBP()
+system.cpu.branchPred = GAgBP()
 #system.cpu.branchPred = BimodalBP()
-system.cpu.branchPred = GAp()
+# system.cpu.branchPred = GAp()
 
 # Here we set the arm "hello world" binary. With other ISAs you must specify
 # workloads compiled to those ISAs. Other "hello world" binaries for other ISAs
