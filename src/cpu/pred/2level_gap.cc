@@ -1,7 +1,7 @@
 // CSI 5640 Final Project
-// Two-level Adaptive GAg Path Predictor - Implementation File
+// Two-level Adaptive GAp Path Predictor - Implementation File
 
-#include "cpu/pred/2level_gag.hh"
+#include "cpu/pred/2level_gap.hh"
 
 namespace gem5
 {
@@ -9,14 +9,16 @@ namespace gem5
 namespace branch_prediction
 {
 
-// Constructor for the GAgBP branch predictor
-GAgBP::GAgBP(const GAgBPParams &params)
+// Constructor for the GApBP branch predictor
+GApBP::GApBP(const GApBPParams &params)
   : BPredUnit(params), // Always need to pass params object to superclass
     globalHistoryReg(params.numThreads, 0), // History vector should always have params.numThreads objects
-    // Rest of the below member variables are initialized specific to GAgBP based on param values
-    historyRegisterSize(1ULL << params.historyRegBits),
-    historyRegisterMask(historyRegisterSize - 1),
-    predCounters(historyRegisterSize, gem5::SatCounter8(params.predCtrBits)),
+    // Rest of the below member variables are initialized specific to GApBP based on param values
+    historyRegisterMask((1ULL << params.historyRegBits) - 1),
+    addressBits(params.addressBits),
+    addressMask((1ULL << addressBits) - 1),
+    numPredCounters(1ULL << (params.historyRegBits + addressBits)),
+    predCounters(numPredCounters, gem5::SatCounter8(params.predCtrBits)),
     predThreshold((1ULL << (params.predCtrBits - 1)) - 1)
 {
 
@@ -32,19 +34,21 @@ GAgBP::GAgBP(const GAgBPParams &params)
 // bp_history: Set to a pointer for the corresponding history structure
 //
 // Returns true if taking the branch is predicted and false otherwise
-bool GAgBP::lookup(ThreadID tid, Addr pc, void * &bp_history)
+bool GApBP::lookup(ThreadID tid, Addr pc, void * &bp_history)
 {
-  // Get the prediction index using the global history for this thread
-  unsigned predIdx = globalHistoryReg[tid] & historyRegisterMask;
+  // Get the prediction index using the global history for this thread and 
+  // the current address of the branch instruction.
+  unsigned predIdx = ((globalHistoryReg[tid] & historyRegisterMask) << addressBits) | 
+                     ((pc >> instShiftAmt) & addressMask);
 
   // Ensure the prediction index is always valid
-  assert(predIdx < historyRegisterSize);
+  assert(predIdx < numPredCounters);
 
   // Obtain the prediction by checking if the corresponding counter is above the threshold
   bool pred = predCounters[predIdx] > predThreshold;
 
-  // Create a new GAg history object containing the current history and prediction made
-  GAgHistory* hist = new GAgHistory;
+  // Create a new GAp history object containing the current history and prediction made
+  GApHistory* hist = new GApHistory;
   hist->globalHistoryReg = globalHistoryReg[tid];
   hist->pred = pred;
 
@@ -67,7 +71,7 @@ bool GAgBP::lookup(ThreadID tid, Addr pc, void * &bp_history)
 // Outputs:
 // bp_history: Set to a pointer for the corresponding history structure. 
 //             Should not be updated unless uncond is true.
-void GAgBP::updateHistories(ThreadID tid, Addr pc, bool uncond, bool taken,
+void GApBP::updateHistories(ThreadID tid, Addr pc, bool uncond, bool taken,
                             Addr target,  void * &bp_history)
 {
   // Ensure that either an unconditional branch occurred or the branch history exists
@@ -76,7 +80,7 @@ void GAgBP::updateHistories(ThreadID tid, Addr pc, bool uncond, bool taken,
   if (uncond)
   {
     // Initialize a new history structure for unconditional branches
-    GAgHistory* hist = new GAgHistory;
+    GApHistory* hist = new GApHistory;
     hist->globalHistoryReg = globalHistoryReg[tid];
     hist->pred = true; // Unconditional branches should always have a true prediction
     bp_history = static_cast<void*>(hist);
@@ -97,13 +101,13 @@ void GAgBP::updateHistories(ThreadID tid, Addr pc, bool uncond, bool taken,
 // Inputs:
 // tid: The current thread being executed
 // bp_history: The previous branch history to use
-void GAgBP::squash(ThreadID tid, void * &bp_history)
+void GApBP::squash(ThreadID tid, void * &bp_history)
 {
   // Ensure a branch history object is provided
   assert(bp_history);
   
   // Cast and update the history register value
-  GAgHistory *history = static_cast<GAgHistory*>(bp_history);
+  GApHistory *history = static_cast<GApHistory*>(bp_history);
   globalHistoryReg[tid] = history->globalHistoryReg;
 
   // Delete the irrelevant history value and set to a null pointer
@@ -121,7 +125,7 @@ void GAgBP::squash(ThreadID tid, void * &bp_history)
 // squashed: Whether or not a squash occurred, making this an invalid prediction
 // inst: UNUSED
 // target: The target address of the branch instruction. Currently UNUSED.
-void GAgBP::update(ThreadID tid, Addr pc, bool taken,
+void GApBP::update(ThreadID tid, Addr pc, bool taken,
                    void * &bp_history, bool squashed,
                    const StaticInstPtr & inst, Addr target)
 {
@@ -129,7 +133,7 @@ void GAgBP::update(ThreadID tid, Addr pc, bool taken,
   assert(bp_history);
 
   // Cast the branch history to the corresponding structure type
-  GAgHistory *history = static_cast<GAgHistory*>(bp_history);
+  GApHistory *history = static_cast<GApHistory*>(bp_history);
 
   // If a squash occurred, this is an invalid prediction
   // Therefore, don't update the prediction counter
@@ -147,11 +151,13 @@ void GAgBP::update(ThreadID tid, Addr pc, bool taken,
     return;
   }
 
-  // Get the prediction index using the provided history register
-  unsigned predIdx = history->globalHistoryReg & historyRegisterMask;
+  // Get the prediction index using the provided history register and 
+  // the current address of the branch instruction
+  unsigned predIdx = ((history->globalHistoryReg & historyRegisterMask) << addressBits) | 
+                     ((pc >> instShiftAmt) & addressMask);
 
   // Ensure the prediction index is valid
-  assert(predIdx < historyRegisterSize);
+  assert(predIdx < numPredCounters);
 
   if (taken)
   {
