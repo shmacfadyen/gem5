@@ -252,6 +252,7 @@ class GAgBP(BranchPredictor):
     # A parameter used for the number of bits applied to the prediction counters
     predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
 
+
 class BimodalBP(BranchPredictor):
     type = "BimodalBP"
     cxx_class = "gem5::branch_prediction::BimodalBP"
@@ -259,6 +260,22 @@ class BimodalBP(BranchPredictor):
 
     indexBits = Param.Unsigned(13, "Bits used from PC to index prediction table")
     predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
+
+
+# Python class for GShareBP
+# Needs to be added to the SConscript file to build (See comments in SConscript)
+class GShareBP(BranchPredictor):
+    # type, class, and header values obtained from C++ implementation
+    type = "GShareBP"
+    cxx_class = "gem5::branch_prediction::GShareBP"
+    cxx_header = "cpu/pred/gshare.hh"
+
+    # A parameter used for the number of bits applied to the history register
+    historyRegBits = Param.Unsigned(13, "Bits used for the history register")
+
+    # A parameter used for the number of bits applied to the prediction counters
+    predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
+
 
 # Python class for GApBP
 # Needs to be added to the SConscript file to build (See comments in SConscript)
