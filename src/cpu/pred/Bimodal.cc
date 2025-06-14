@@ -40,6 +40,11 @@ void BimodalBP::update(ThreadID tid, Addr pc, bool taken,
   void * &bp_history, bool squashed,
   const StaticInstPtr & inst, Addr target)
 {
+  if (squashed)
+  {
+    return;
+  }
+  
   unsigned idx = (pc >> instShiftAmt) & indexMask;
 
   if (taken)

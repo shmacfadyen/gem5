@@ -137,7 +137,8 @@ void GApBP::update(ThreadID tid, Addr pc, bool taken,
 
   // If a squash occurred, this is an invalid prediction
   // Therefore, don't update the prediction counter
-  if (squashed) {
+  if (squashed) 
+  {
     // Instead update the global history value using a left shift operation and 
     // setting the LSB to 1 if the branch is taken and 0 if it is not.
     // This corrects an earlier call to updateHistories() that was invalid.

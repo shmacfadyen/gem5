@@ -155,7 +155,8 @@ void PApBP::update(ThreadID tid, Addr pc, bool taken,
 
   // If a squash occurred, this is an invalid prediction
   // Therefore, don't update the prediction counter
-  if (squashed) {
+  if (squashed) 
+  {
     // Get the history index using the thread and address
     unsigned histIdx = (tid << addressHistBits) | ((history->pc >> instShiftAmt) & addressHistMask);
     
