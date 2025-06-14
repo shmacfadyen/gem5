@@ -29,6 +29,7 @@ This is the ARM equivalent to `simple.py` (which is designed to run using the
 X86 ISA). More detailed documentation can be found in `simple.py`.
 """
 
+import sys, os
 import m5
 from m5.objects import *
 
@@ -65,23 +66,46 @@ system.mem_ctrl.port = system.membus.mem_side_ports
 system.system_port = system.membus.cpu_side_ports
 
 #Branch Prediction
-system.cpu.branchPred = GAgBP()
-#system.cpu.branchPred = BimodalBP()
-# system.cpu.branchPred = GAp()
+if (len(sys.argv) > 1):
+    match sys.argv[1].lower():
+        case 'gag':
+            system.cpu.branchPred = GAgBP()
+        case 'gap':
+            system.cpu.branchPred = GApBP()
+        case 'pag':
+            system.cpu.branchPred = PAgBP()
+        case 'pap':
+            system.cpu.branchPred = PApBP()
+        case 'bimodal':
+            system.cpu.branchPred = BimodalBP()
+        case 'gshare':
+            system.cpu.branchPred = GShareBP()
+        case 'perceptron':
+            system.cpu.branchPred = MultiperspectivePerceptron8KB()
+        case 'tournament':
+            system.cpu.branchPred = TournamentBP()
+else:
+    system.cpu.branchPred = GAgBP()
+    # system.cpu.branchPred = BimodalBP()
+    # system.cpu.branchPred = GApBP()
 
-# Here we set the arm "hello world" binary. With other ISAs you must specify
-# workloads compiled to those ISAs. Other "hello world" binaries for other ISAs
-# can be found in "tests/test-progs/hello".
-thispath = os.path.dirname(os.path.realpath(__file__))
-binary = os.path.join(
-    thispath,
-    #Sets up three directory levels
-    "../../",
-    #Change to the path of our program
-    #"configs/learning_gem5/part1/test_files/multihelloworld-arm"
-    "configs/learning_gem5/telecomm/CRC32/crc"
-    ,
-)
+if (len(sys.argv) > 2) and os.path.isfile(sys.argv[2]):
+    binary = sys.argv[2]
+else:
+    # Here we set the arm "hello world" binary. With other ISAs you must specify
+    # workloads compiled to those ISAs. Other "hello world" binaries for other ISAs
+    # can be found in "tests/test-progs/hello".
+    thispath = os.path.dirname(os.path.realpath(__file__))
+    binary = os.path.join(
+        thispath,
+        #Sets up three directory levels
+        "../../../",
+        #Change to the path of our program
+        #"configs/learning_gem5/part1/test_files/multihelloworld-arm"
+        # "configs/learning_gem5/telecomm/CRC32/crc"
+        "mibench/automotive/basicmath/basicmath_small"
+        ,
+    )
 
 system.workload = SEWorkload.init_compatible(binary)
 
