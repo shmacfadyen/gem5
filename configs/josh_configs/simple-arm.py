@@ -65,7 +65,9 @@ system.mem_ctrl.port = system.membus.mem_side_ports
 system.system_port = system.membus.cpu_side_ports
 
 #Branch Prediction
-system.cpu.branchPred = GAgBP()
+#system.cpu.branchPred = GAgBP()
+#system.cpu.branchPred = BimodalBP()
+system.cpu.branchPred = GAp()
 
 # Here we set the arm "hello world" binary. With other ISAs you must specify
 # workloads compiled to those ISAs. Other "hello world" binaries for other ISAs
@@ -76,7 +78,9 @@ binary = os.path.join(
     #Sets up three directory levels
     "../../",
     #Change to the path of our program
-    "configs/learning_gem5/part1/test_files/multihelloworld-arm",
+    #"configs/learning_gem5/part1/test_files/multihelloworld-arm"
+    "configs/learning_gem5/telecomm/CRC32/crc"
+    ,
 )
 
 system.workload = SEWorkload.init_compatible(binary)
