@@ -296,6 +296,27 @@ class PAgBP(BranchPredictor):
     predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
 
 
+# Python class for PApBP
+# Needs to be added to the SConscript file to build (See comments in SConscript)
+class PApBP(BranchPredictor):
+    # type, class, and header values obtained from C++ implementation
+    type = "PApBP"
+    cxx_class = "gem5::branch_prediction::PApBP"
+    cxx_header = "cpu/pred/2level_pap.hh"
+
+    # A parameter used for the number of bits applied to the history register
+    historyRegBits = Param.Unsigned(8, "Bits used for the history register")
+
+    # A parameter used for the number of bits applied to the address to index into the history register
+    addressHistBits = Param.Unsigned(8, "Bits used for the address to index into the history register")
+
+    # A parameter used for the number of bits applied to the address with the prediction counter index
+    addressPredBits = Param.Unsigned(8, "Bits used for the address with the prediction counter index")
+
+    # A parameter used for the number of bits applied to the prediction counters
+    predCtrBits = Param.Unsigned(2, "Bits used for the prediction counters")
+
+
 class TAGEBase(SimObject):
     type = "TAGEBase"
     cxx_class = "gem5::branch_prediction::TAGEBase"
