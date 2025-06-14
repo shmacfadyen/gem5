@@ -48,7 +48,7 @@ SimObject('BranchPredictor.py',
     'BranchTargetBuffer', 'SimpleBTB', 'BTBIndexingPolicy', 'BTBSetAssociative',
     'ReturnAddrStack',
     'LocalBP', 'TournamentBP', 'BiModeBP', 
-    'GAgBP', 'GApBP','BimodalBP', # Add additional defined branch predicator python classes here
+    'GAgBP', 'GApBP', 'PAgBP', 'BimodalBP', # Add additional defined branch predicator python classes here
     'TAGEBase', 'TAGE', 'LoopPredictor',
     'TAGE_SC_L_TAGE', 'TAGE_SC_L_TAGE_64KB', 'TAGE_SC_L_TAGE_8KB',
     'LTAGE', 'TAGE_SC_L_LoopPredictor', 'StatisticalCorrector', 'TAGE_SC_L',
@@ -67,6 +67,7 @@ Source('bpred_unit.cc')
 
 Source('2level_gag.cc')
 Source('2level_gap.cc')
+Source('2level_pag.cc')
 # Add additional C++ branch prediction source files here
 
 Source('Bimodal.cc')

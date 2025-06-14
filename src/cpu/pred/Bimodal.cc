@@ -20,7 +20,7 @@ BimodalBP::BimodalBP(const BimodalBPParams &params)
 
 bool BimodalBP::lookup(ThreadID tid, Addr pc, void * &bp_history)
 {
-  unsigned idx = (pc >> 2) & indexMask;
+  unsigned idx = (pc >> instShiftAmt) & indexMask;
   bool pred = predCounters[idx] > predThreshold;
 
   bp_history = nullptr;
@@ -40,7 +40,7 @@ void BimodalBP::update(ThreadID tid, Addr pc, bool taken,
   void * &bp_history, bool squashed,
   const StaticInstPtr & inst, Addr target)
 {
-  unsigned idx = (pc >> 2) & indexMask;
+  unsigned idx = (pc >> instShiftAmt) & indexMask;
 
   if (taken)
     predCounters[idx]++;
