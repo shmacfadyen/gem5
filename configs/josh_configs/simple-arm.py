@@ -43,7 +43,7 @@ system.clk_domain.voltage_domain = VoltageDomain()
 
 # Set up the system
 system.mem_mode = "atomic" # Use timing accesses
-system.mem_ranges = [AddrRange("4GiB")] # Create an address range
+system.mem_ranges = [AddrRange("8GiB")] # Create an address range
 system.cpu = ArmAtomicSimpleCPU()
 
 # Create a memory bus, a system crossbar, in this case
@@ -89,17 +89,25 @@ else:
     # system.cpu.branchPred = BimodalBP()
     # system.cpu.branchPred = GApBP()
 
-if (len(sys.argv) > 2) and os.path.isfile(sys.argv[2]):
-    binary = sys.argv[2]
+thispath = os.path.dirname(os.path.realpath(__file__))
+if (len(sys.argv) > 2) and ((os.path.isfile(sys.argv[2]) and os.path.isabs(sys.argv[2])) or 
+                            os.path.isfile(os.path.join(thispath, "../..", sys.argv[2]))):
+    if (os.path.isabs(sys.argv[2])):
+        binary = sys.argv[2]
+    else:
+        binary = os.path.join(
+            thispath,
+            "../..",
+            sys.argv[2]
+        )
 else:
     # Here we set the arm "hello world" binary. With other ISAs you must specify
     # workloads compiled to those ISAs. Other "hello world" binaries for other ISAs
     # can be found in "tests/test-progs/hello".
-    thispath = os.path.dirname(os.path.realpath(__file__))
     binary = os.path.join(
         thispath,
         #Sets up three directory levels
-        "../../../",
+        "../../",
         #Change to the path of our program
         #"configs/learning_gem5/part1/test_files/multihelloworld-arm"
         # "configs/learning_gem5/telecomm/CRC32/crc"
@@ -113,7 +121,10 @@ system.workload = SEWorkload.init_compatible(binary)
 process = Process()
 # Set the command
 # cmd is a list which begins with the executable (like argv)
-process.cmd = [binary]
+if len(sys.argv) > 3:
+    process.cmd = [binary] + sys.argv[3:]
+else:
+    process.cmd = [binary]
 # Set the cpu to use the process as its workload and create thread contexts
 system.cpu.workload = process
 system.cpu.createThreads()
