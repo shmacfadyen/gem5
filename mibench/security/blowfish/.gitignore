@@ -1,0 +1,9 @@
+*
+
+!.gitignore
+!LICENSE
+!Makefile
+!runme_small.sh
+
+!bf_encode
+!bf_decode

@@ -1,0 +1,9 @@
+*
+
+!.gitignore
+!LICENSE
+!Makefile
+!runme_small.sh
+
+!rijndael_encode
+!rijndael_decode

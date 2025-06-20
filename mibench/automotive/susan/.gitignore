@@ -1,0 +1,10 @@
+*
+
+!.gitignore
+!LICENSE
+!Makefile
+!runme_small.sh
+
+!susan_corners
+!susan_edges
+!susan_smoothing

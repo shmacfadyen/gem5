@@ -1,0 +1,8 @@
+*
+
+!.gitignore
+!LICENSE
+!Makefile
+!runme_small.sh
+
+!crc

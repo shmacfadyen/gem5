@@ -1,0 +1,6 @@
+*
+
+!.gitignore
+!cjpeg
+!djpeg
+!Makefile

@@ -1,0 +1,9 @@
+*
+
+!.gitignore
+!LICENSE
+!Makefile
+!runme_small.sh
+
+!fft_forwards
+!fft_inverse
