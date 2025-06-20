@@ -97,3 +97,7 @@ or start discussions. To join the mailing list please visit
 We hope you enjoy using gem5. When appropriate we advise sharing your
 contributions to the project. <https://www.gem5.org/contributing> can help you
 get started. Additional information can be found in the CONTRIBUTING.md file.
+
+## CSI 5640 Project Contributions
+
+See the [README-CSI5640.md](README-CSI5640.md) for the contributions and specific installation instructions for the CSI 5640 project by Shane MacFadyen, Joshua Duncan, and Matthew Zaitouna.
