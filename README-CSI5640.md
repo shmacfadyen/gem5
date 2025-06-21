@@ -145,7 +145,7 @@ After running the above script, the resulting `stats.txt` files will be in many 
 
 ### Evaluating the Results
 
-The resulting mis-prediction rate can be obtained from the `stats.txt` files through running the `Efficiency.py` script within the `src/cpu/pred` folder. However, the individual file name needs to be manually updated in the script to obtain the corresponding hit/miss rate. Additionally, this file can be used to plot the simulation results be manually placing the miss rate in each of the corresponding variables for the branch predictor types and re-running the script.
+The resulting mis-prediction rate can be obtained from the `stats.txt` files through running the `Efficiency.py` script within the `src/cpu/pred` folder. However, the individual file name needs to be manually updated in the script to obtain the corresponding hit/miss rate. The results can then be separately graphed to produce resulting plots.
 
 ## Emulated CPU Specs
 
