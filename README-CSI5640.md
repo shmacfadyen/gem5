@@ -154,4 +154,4 @@ The resulting mis-prediction rate can be obtained from the `stats.txt` files thr
 | CPU | ArmAtomicSimpleCPU |
 | Clock Frequency | 2 GHz |
 | RAM Type | DDR4_2400_8x8 |
-| RAM Amount | 8 GB |
+| RAM Amount | 8 GiB |
