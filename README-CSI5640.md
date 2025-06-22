@@ -75,7 +75,7 @@ Now the Gem5 software has been built and can be used for processor emulation.
 
 ### MiBench Setup
 
-The following procedure describes how to obtain and build the MiBench software applications. However, the binaries should already have been downloaded when the git repository (https://github.com/shmacfadyen/gem5.git) was cloned. Therefore, this section is only needed if you intend to rebuild the benchmark software for the simulated architecture.
+The following procedure describes how to obtain and build the MiBench software applications. However, the binaries should already have been downloaded when the git repository (https://github.com/shmacfadyen/gem5.git) was cloned. Therefore, this section is only needed to obtain the MiBench data files to execute the application with or if you intend to rebuild the benchmark software for the simulated architecture.
 
 The next step is obtaining the MiBench software and building for an ARM architecture. The steps are shown below.
 
@@ -91,7 +91,7 @@ The next step is obtaining the MiBench software and building for an ARM architec
 
 3. Extract all the tar.gz files into that directory, WITHOUT replacing any existing files. This is due to needing to manually update many of the make files to cross-compile for the ARM architecture. These updated Makefiles should already exist and should not be replaced if the target architecture is still an ARM system.
 
-4. Individually traverse to each subdirectory of the downloaded tar.gz files, running `make` to generate the binaries for the benchmark software. The programs that were used during the project are listed below:
+4. If you want to recompile all the program binaries, individually traverse to each subdirectory of the downloaded tar.gz files, running `make` to generate the binaries for the benchmark software. The programs that were used during the project are listed below:
     - automotive/basicmath
     - automotive/qsort
     - automotive/susan
